@@ -7,7 +7,7 @@ VS Code -> GitHub -> Jenkins -> SSH to Raspberry Pi -> Robot Framework validatio
 Default Raspberry Pi target:
 
 ```text
-192.168.1.8
+192.168.1.2
 ```
 
 ## Testcases
@@ -53,7 +53,7 @@ Run the Robot test locally:
 ```bash
 robot \
   --outputdir reports \
-  --variable RASPI_HOST:192.168.1.8 \
+  --variable RASPI_HOST:192.168.1.2 \
   --variable RASPI_USER:pi \
   --variable SSH_KEY_FILE:$HOME/.ssh/jenkins_raspi \
   tests/raspi_basic_validation.robot
@@ -75,6 +75,13 @@ ID: raspi-ssh-key
 Username: pi or your Raspberry Pi username
 Private key: Jenkins-to-Raspberry private key
 ```
+
+The Jenkins pipeline uses the username stored in this credential by default.
+Only set the `RASPI_USER` job parameter when you intentionally want to override
+the credential username.
+
+The pipeline default Raspberry Pi target is `192.168.1.2`. Change the
+`RASPI_HOST` job parameter if your Raspberry Pi has a different IP address.
 
 ## Jenkins job type
 

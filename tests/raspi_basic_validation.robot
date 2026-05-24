@@ -6,7 +6,7 @@ Suite Setup       Open Raspberry SSH Session
 Suite Teardown    Close All Connections
 
 *** Variables ***
-${RASPI_HOST}                 192.168.1.8
+${RASPI_HOST}                 192.168.1.2
 ${RASPI_USER}                 pi
 ${SSH_KEY_FILE}               %{SSH_KEY_FILE=}
 ${SSH_TIMEOUT}                10 seconds

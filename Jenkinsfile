@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'RASPI_HOST', defaultValue: '192.168.1.2', description: 'Raspberry Pi IP address')
-        string(name: 'RASPI_USER', defaultValue: 'pi', description: 'Raspberry Pi SSH username')
+        string(name: 'RASPI_USER', defaultValue: '', description: 'Optional Raspberry Pi SSH username override. Leave blank to use the Jenkins credential username.')
         string(name: 'MAX_DISK_USE_PERCENT', defaultValue: '90', description: 'Maximum allowed root disk usage percent')
         booleanParam(name: 'RUN_PING_PRECHECK', defaultValue: true, description: 'Ping Raspberry Pi before running Robot test')
     }
@@ -82,9 +82,12 @@ pipeline {
                     bat '''
                     echo Running Robot Framework test
                     echo Raspberry Pi Host: %RASPI_HOST%
-                    echo Raspberry Pi User: %RASPI_USER%
 
-                    venv\\Scripts\\python.exe -m robot --outputdir reports --xunit xunit.xml --loglevel INFO --variable RASPI_HOST:%RASPI_HOST% --variable RASPI_USER:%RASPI_USER% --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% tests\\raspi_basic_validation.robot
+                    set "EFFECTIVE_RASPI_USER=%RASPI_USER%"
+                    if "%EFFECTIVE_RASPI_USER%"=="" set "EFFECTIVE_RASPI_USER=%SSH_USER_FROM_CRED%"
+                    echo Raspberry Pi User: %EFFECTIVE_RASPI_USER%
+
+                    venv\\Scripts\\python.exe -m robot --outputdir reports --xunit xunit.xml --loglevel INFO --variable RASPI_HOST:%RASPI_HOST% --variable RASPI_USER:%EFFECTIVE_RASPI_USER% --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% tests\\raspi_basic_validation.robot
                     '''
                 }
             }

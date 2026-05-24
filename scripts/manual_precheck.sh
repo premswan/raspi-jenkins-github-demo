@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-RASPI_HOST="${1:-192.168.1.8}"
+RASPI_HOST="${1:-192.168.1.2}"
 RASPI_USER="${2:-pi}"
 SSH_KEY="${3:-$HOME/.ssh/jenkins_raspi}"
 
