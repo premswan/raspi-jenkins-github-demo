@@ -9,7 +9,7 @@ pipeline {
     }
 
     environment {
-        VENV_DIR = '.venv'
+        VENV_DIR = 'venv'
         REPORT_DIR = 'reports'
     }
 
@@ -20,16 +20,23 @@ pipeline {
             }
         }
 
-        stage('Show Environment') {
+        stage('Debug Workspace') {
             steps {
                 bat '''
-                echo Current directory:
+                echo Current workspace:
                 cd
 
-                echo Python version:
-                python --version
+                echo Listing files:
+                dir
 
-                echo Git version:
+                echo Checking tests folder:
+                dir tests
+
+                echo Checking Python:
+                python --version
+                where python
+
+                echo Checking Git:
                 git --version
                 '''
             }
@@ -38,15 +45,16 @@ pipeline {
         stage('Prepare Python Environment') {
             steps {
                 bat '''
-                if exist %VENV_DIR% rmdir /s /q %VENV_DIR%
+                if exist venv rmdir /s /q venv
+                if exist reports rmdir /s /q reports
 
-                python -m venv %VENV_DIR%
+                python -m venv venv
 
-                %VENV_DIR%\\Scripts\\python.exe -m pip install --upgrade pip
-                %VENV_DIR%\\Scripts\\pip.exe install -r requirements.txt
+                venv\\Scripts\\python.exe --version
+                venv\\Scripts\\python.exe -m pip install --upgrade pip
+                venv\\Scripts\\python.exe -m pip install -r requirements.txt
 
-                if exist %REPORT_DIR% rmdir /s /q %REPORT_DIR%
-                mkdir %REPORT_DIR%
+                mkdir reports
                 '''
             }
         }
@@ -72,15 +80,11 @@ pipeline {
                     )
                 ]) {
                     bat '''
-                    %VENV_DIR%\\Scripts\\python.exe -m robot ^
-                      --outputdir %REPORT_DIR% ^
-                      --xunit xunit.xml ^
-                      --loglevel INFO ^
-                      --variable RASPI_HOST:%RASPI_HOST% ^
-                      --variable RASPI_USER:%RASPI_USER% ^
-                      --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" ^
-                      --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% ^
-                      tests\\raspi_basic_validation.robot
+                    echo Running Robot Framework test
+                    echo Raspberry Pi Host: %RASPI_HOST%
+                    echo Raspberry Pi User: %RASPI_USER%
+
+                    venv\\Scripts\\python.exe -m robot --outputdir reports --xunit xunit.xml --loglevel INFO --variable RASPI_HOST:%RASPI_HOST% --variable RASPI_USER:%RASPI_USER% --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% tests\\raspi_basic_validation.robot
                     '''
                 }
             }
