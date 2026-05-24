@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "robocorp.robotframework-lsp",
+    "ms-python.python",
+    "eamodio.gitlens"
+  ]
+}

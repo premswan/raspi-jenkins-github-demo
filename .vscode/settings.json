@@ -1,0 +1,5 @@
+{
+  "files.trimTrailingWhitespace": true,
+  "editor.formatOnSave": true,
+  "robot.language-server.python": ".venv/bin/python"
+}
