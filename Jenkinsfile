@@ -76,6 +76,7 @@ pipeline {
                     sshUserPrivateKey(
                         credentialsId: 'raspi-ssh-key',
                         keyFileVariable: 'SSH_KEY_FILE',
+                        passphraseVariable: 'SSH_KEY_PASSPHRASE',
                         usernameVariable: 'SSH_USER_FROM_CRED'
                     )
                 ]) {
@@ -87,7 +88,7 @@ pipeline {
                     if "%EFFECTIVE_RASPI_USER%"=="" set "EFFECTIVE_RASPI_USER=%SSH_USER_FROM_CRED%"
                     echo Raspberry Pi User: %EFFECTIVE_RASPI_USER%
 
-                    venv\\Scripts\\python.exe -m robot --outputdir reports --xunit xunit.xml --loglevel INFO --variable RASPI_HOST:%RASPI_HOST% --variable RASPI_USER:%EFFECTIVE_RASPI_USER% --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% tests\\raspi_basic_validation.robot
+                    venv\\Scripts\\python.exe -m robot --outputdir reports --xunit xunit.xml --loglevel INFO --variable RASPI_HOST:%RASPI_HOST% --variable RASPI_USER:%EFFECTIVE_RASPI_USER% --variable SSH_KEY_FILE:"%SSH_KEY_FILE%" --variable SSH_KEY_PASSPHRASE:"%SSH_KEY_PASSPHRASE%" --variable MAX_DISK_USE_PERCENT:%MAX_DISK_USE_PERCENT% tests\\raspi_basic_validation.robot
                     '''
                 }
             }

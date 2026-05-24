@@ -9,6 +9,7 @@ Suite Teardown    Close All Connections
 ${RASPI_HOST}                 192.168.1.2
 ${RASPI_USER}                 pi
 ${SSH_KEY_FILE}               %{SSH_KEY_FILE=}
+${SSH_KEY_PASSPHRASE}         %{SSH_KEY_PASSPHRASE=}
 ${SSH_TIMEOUT}                10 seconds
 ${MAX_DISK_USE_PERCENT}       90
 ${MIN_MEM_AVAILABLE_MB}       100
@@ -20,7 +21,7 @@ Open Raspberry SSH Session
     Should Not Be Empty    ${RASPI_USER}
     Should Not Be Empty    ${SSH_KEY_FILE}
     Open Connection    ${RASPI_HOST}    timeout=${SSH_TIMEOUT}
-    Login With Public Key    ${RASPI_USER}    ${SSH_KEY_FILE}
+    Login With Public Key    ${RASPI_USER}    ${SSH_KEY_FILE}    ${SSH_KEY_PASSPHRASE}
 
 Run Remote Command
     [Arguments]    ${command}
