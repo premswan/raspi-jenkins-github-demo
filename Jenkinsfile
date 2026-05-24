@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'RASPI_HOST', defaultValue: '192.168.1.8', description: 'Raspberry Pi IP address')
+        string(name: 'RASPI_HOST', defaultValue: '192.168.1.2', description: 'Raspberry Pi IP address')
         string(name: 'RASPI_USER', defaultValue: 'pi', description: 'SSH username for Raspberry Pi')
         string(name: 'MAX_DISK_USE_PERCENT', defaultValue: '90', description: 'Fail if root filesystem usage is >= this value')
         booleanParam(name: 'RUN_PING_PRECHECK', defaultValue: true, description: 'Run ping before SSH validation')
